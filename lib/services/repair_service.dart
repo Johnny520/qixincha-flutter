@@ -43,8 +43,8 @@ class RepairService {
   RepairResult _checkConfig() {
     try {
       // 触发一次读取，若抛异常说明存储损坏
-      final _ = config.getFollowList();
-      final _ = config.get<String>('apibyte_key', '');
+      config.getFollowList();
+      config.get<String>('apibyte_key', '');
       return RepairResult('配置文件', true, '配置读写正常。');
     } catch (e) {
       return RepairResult('配置文件', false, '配置读取失败：$e');
