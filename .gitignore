@@ -1,0 +1,23 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+__pycache__/
+*.swp
+
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+*.apk
+*.aab
+/android/key.properties
+/android/local.properties
+
+# IntelliJ / Android Studio
+*.iml
+.idea/
+.vscode/
