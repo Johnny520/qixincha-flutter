@@ -6,19 +6,12 @@
     <group android:translateX="32" android:translateY="32">
         <path
             android:fillColor="#FFFFFF"
-            android:strokeColor="#FFFFFF"
-            android:strokeWidth="4"
-            android:pathData="M27,4 A17,17 0 1,0 28,4 M27,4 L39,16" />
-        <circle
+            android:pathData="M12,27 a15,15 0 1,0 30,0 a15,15 0 1,0 -30,0 Z" />
+        <path
             android:fillColor="#1565C0"
-            android:cx="27"
-            android:cy="27"
-            android:r="13" />
+            android:pathData="M18,27 a9,9 0 1,0 18,0 a9,9 0 1,0 -18,0 Z" />
         <path
             android:fillColor="#FFFFFF"
-            android:pathData="M27,14 A13,13 0 1,0 27,40 A13,13 0 1,0 27,14 Z M27,20 A7,7 0 1,1 27,34 A7,7 0 1,1 27,20 Z" />
-        <path
-            android:fillColor="#FFFFFF"
-            android:pathData="M33,33 L44,44 L40,48 L29,37 Z" />
+            android:pathData="M35,35 L49,49 L42,56 L28,42 Z" />
     </group>
 </vector>
