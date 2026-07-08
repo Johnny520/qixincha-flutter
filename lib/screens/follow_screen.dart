@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../models/company.dart';
+import '../theme.dart';
 import '../services/config_service.dart';
 import '../services/cache_service.dart';
 import '../services/api_service.dart';
