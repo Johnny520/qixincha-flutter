@@ -60,6 +60,21 @@ class ConfigService {
     return defaults[key] as T;
   }
 
+  /// 原始读取：直接读 SharedPreferences，不做任何容错与类型回退。
+  /// 存储不可用或数据损坏（例如某 key 存成了错误类型）时会抛出异常，
+  /// 供修复中心探测配置是否损坏并触发 reset。
+  dynamic rawGet(String key) {
+    if (_prefs == null) {
+      throw StateError('存储不可用');
+    }
+    final full = '$_prefix$key';
+    final dv = defaults[key];
+    if (dv is List) return _prefs!.getStringList(full);
+    if (dv is bool) return _prefs!.getBool(full);
+    if (dv is int) return _prefs!.getInt(full);
+    return _prefs!.getString(full);
+  }
+
   Future<bool> set<T>(String key, T value) async {
     _cache[key] = value;
     try {

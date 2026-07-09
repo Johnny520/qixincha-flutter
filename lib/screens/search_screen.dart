@@ -30,6 +30,7 @@ class _SearchScreenState extends State<SearchScreen> {
   List<Company> _results = [];
   bool _loading = false;
   String? _error;
+  String? _openingName; // 正在打开详情的企业名（用于加载指示）
 
   Future<void> _doSearch([String? q]) async {
     final query = (q ?? _ctrl.text).trim();
@@ -56,6 +57,24 @@ class _SearchScreenState extends State<SearchScreen> {
         });
       }
     }
+  }
+
+  /// 进入详情前先获取完整工商数据，保证详情页展示完整信息（与关注页一致）。
+  Future<void> _openDetail(Company company) async {
+    setState(() => _openingName = company.name);
+    Company target = company;
+    try {
+      final detail = await widget.api.getDetail(company.name);
+      if (detail != null) target = detail;
+    } catch (e) {
+      // 获取失败则退回到仅有名称的基础对象，至少能打开详情页。
+    }
+    if (!mounted) return;
+    setState(() => _openingName = null);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => DetailScreen(company: target)),
+    );
   }
 
   @override
@@ -100,11 +119,11 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildBody() {
+    Widget child;
     if (_loading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (_error != null) {
-      return Center(
+      child = const Center(child: CircularProgressIndicator());
+    } else if (_error != null) {
+      child = Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -116,12 +135,21 @@ class _SearchScreenState extends State<SearchScreen> {
               const SizedBox(height: 16),
               FilledButton.tonal(
                 onPressed: () async {
-                  final report = await widget.repair.runRepair();
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('修复完成：${report.where((r) => r.fixed).length} 项已处理')),
-                    );
-                    _doSearch();
+                  // 统一用 try/catch 包裹，避免未来 runRepair 改动时漏捕导致闪退。
+                  try {
+                    final report = await widget.repair.runRepair();
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('修复完成：${report.where((r) => r.fixed).length} 项已处理')),
+                      );
+                      _doSearch();
+                    }
+                  } catch (e) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('修复失败：$e')),
+                      );
+                    }
                   }
                 },
                 child: const Text('去修复中心修复'),
@@ -130,9 +158,8 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
       );
-    }
-    if (_results.isEmpty) {
-      return const Center(
+    } else if (_results.isEmpty) {
+      child = const Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -142,19 +169,30 @@ class _SearchScreenState extends State<SearchScreen> {
           ],
         ),
       );
+    } else {
+      child = ListView.builder(
+        itemCount: _results.length,
+        itemBuilder: (ctx, i) {
+          final c = _results[i];
+          return CompanyCard(
+            company: c,
+            onTap: () => _openDetail(c),
+          );
+        },
+      );
     }
-    return ListView.builder(
-      itemCount: _results.length,
-      itemBuilder: (ctx, i) {
-        final c = _results[i];
-        return CompanyCard(
-          company: c,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => DetailScreen(company: c)),
+    // 打开详情时的加载指示
+    if (_openingName != null) {
+      child = Stack(
+        children: [
+          child,
+          Container(
+            color: Colors.black12,
+            child: const Center(child: CircularProgressIndicator()),
           ),
-        );
-      },
-    );
+        ],
+      );
+    }
+    return child;
   }
 }

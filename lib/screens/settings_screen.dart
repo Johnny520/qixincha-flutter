@@ -5,6 +5,7 @@ import '../services/cache_service.dart';
 import '../services/api_service.dart';
 import '../services/repair_service.dart';
 import '../theme.dart';
+import '../services/disclaimer_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   final ConfigService config;
@@ -43,7 +44,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _loadVersion() async {
     try {
-      final info = await PackageInfo.fromPlatform();
+      final info = await PackageInfoPlus.instance.fromPlatform();
       if (mounted) setState(() => _version = '${info.version} (${info.buildNumber})');
     } catch (e) {
       if (mounted) setState(() => _version = '1.3.0');
@@ -94,6 +95,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
               );
             }).toList(),
           ),
+        ),
+        actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('关闭'))],
+      ),
+    );
+  }
+
+  void _showDisclaimer(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('免责声明'),
+        content: SingleChildScrollView(
+          child: Text(DisclaimerService.disclaimerText,
+              style: const TextStyle(fontSize: 13, height: 1.6)),
         ),
         actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('关闭'))],
       ),
@@ -187,6 +202,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
               ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          _sectionTitle('协议与关于'),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.gavel),
+              title: const Text('免责声明'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => _showDisclaimer(context),
             ),
           ),
           const SizedBox(height: 16),

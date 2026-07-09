@@ -42,9 +42,19 @@ class RepairService {
   /// 配置完整性检测
   RepairResult _checkConfig() {
     try {
-      // 触发一次读取，若抛异常说明存储损坏
+      // 1) 常规读取，确认基础读写可用
       config.getFollowList();
       config.get<String>('apibyte_key', '');
+      // 2) 结构校验：rawGet 在存储异常或类型不匹配（配置损坏）时会抛错。
+      //    注意：未写入的 key 返回 null 属于正常（首装），只校验“非 null 却类型错误”。
+      final follow = config.rawGet('follow_list');
+      if (follow != null && follow is! List) {
+        return RepairResult('配置文件', false, '关注列表数据结构异常，可能已损坏。');
+      }
+      final ak = config.rawGet('apibyte_key');
+      if (ak != null && ak is! String) {
+        return RepairResult('配置文件', false, '配置项类型异常，可能已损坏。');
+      }
       return RepairResult('配置文件', true, '配置读写正常。');
     } catch (e) {
       return RepairResult('配置文件', false, '配置读取失败：$e');
@@ -71,10 +81,8 @@ class RepairService {
   Future<List<RepairResult>> autoRepair() async {
     final fixed = <RepairResult>[];
 
-    // 1) 配置损坏 → 重置
-    try {
-      config.get<String>('apibyte_key', '');
-    } catch (e) {
+    // 1) 配置损坏 → 重置（依赖 _checkConfig 真正探测损坏，而非永远通过的 get）
+    if (!_checkConfig().ok) {
       final ok = await config.reset();
       fixed.add(RepairResult('配置文件', ok,
           ok ? '检测到配置损坏，已重置为默认设置。' : '配置重置失败。',
