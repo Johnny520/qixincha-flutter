@@ -1,5 +1,13 @@
 # 企信查 更新日志
 
+## v1.3.1
+- **作者署名统一**：README、LICENSE、pubspec、设置页「关于」与全部 Dart 源码版权头统一署名为「文强哥 / Johnny520」。
+- **新增 MIT 许可证**：补充 `LICENSE` 文件（版权人 文强哥 (Johnny520)，年份 2026）。
+- **缺陷修复**：对比页在详情接口返回 `null`（而非抛异常）时不再空白，自动回退为基础企业对象；移除 `api_service` 中未被调用的 `_fetchJson` 死代码与冗余 `dart:convert` / `dart:async` import。
+- **代码复用**：抽出 `widgets/company_fields.dart`（企业字段提取）与 `widgets/info_row.dart`（键值信息行），详情页与对比页统一复用，字段口径与视觉一致。
+- **UI 美化**：重构 `theme.dart` 配色与排版（统一卡片 / 按钮 / 输入框 / 分割线 / 列表样式与圆角），优化设置页「关于」开发者署名展示。
+- 包名保持 `com.qxx.johnny`（与原版一致，未改动）。
+
 ## v1.3.0 (Flutter 重写版)
 - **技术栈迁移**：从 Python/Kivy 全面重写为 Flutter（Dart），彻底解决 Android 闪退/卡启动页问题；兼容 Android 12–16，启动更快、界面更流畅。
 - **启动自动修复**：App 启动时自动检测并修复「配置损坏 / 缓存异常」，不再卡在启动页后崩溃；若修复了问题，顶栏会显示修复提示按钮。
