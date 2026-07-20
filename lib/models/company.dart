@@ -1,3 +1,5 @@
+// Copyright 2026 文强哥 (Johnny520). All rights reserved.
+// 企信查 Flutter 版 · 企业工商信息查询 App
 class Company {
   final String name;
   final String? creditCode;

@@ -1,3 +1,5 @@
+// Copyright 2026 文强哥 (Johnny520). All rights reserved.
+// 企信查 Flutter 版 · 企业工商信息查询 App
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// 首次启动免责声明服务。

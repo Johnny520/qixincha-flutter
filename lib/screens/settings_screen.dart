@@ -1,3 +1,5 @@
+// Copyright 2026 文强哥 (Johnny520). All rights reserved.
+// 企信查 Flutter 版 · 企业工商信息查询 App
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import '../services/config_service.dart';
@@ -217,10 +219,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const SizedBox(height: 16),
           _sectionTitle('关于'),
           Card(
-            child: ListTile(
-              leading: const Icon(Icons.info_outline),
-              title: const Text('企信查'),
-              subtitle: Text('版本 $_version\nFlutter 重写版 · 类天眼查企业查询'),
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.info_outline),
+                  title: const Text('企信查'),
+                  subtitle: Text('版本 $_version\nFlutter 重写版 · 类天眼查企业查询'),
+                ),
+                const Divider(height: 1),
+                const ListTile(
+                  leading: Icon(Icons.person_outline),
+                  title: Text('开发者'),
+                  subtitle: Text('文强哥 / Johnny520'),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.copyright),
+                  title: const Text('版权与许可证'),
+                  subtitle: const Text('© 2026 文强哥 (Johnny520) · MIT License'),
+                ),
+              ],
             ),
           ),
         ],
