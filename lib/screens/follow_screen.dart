@@ -1,3 +1,5 @@
+// Copyright 2026 文强哥 (Johnny520). All rights reserved.
+// 企信查 Flutter 版 · 企业工商信息查询 App
 import 'package:flutter/material.dart';
 import '../models/company.dart';
 import '../theme.dart';

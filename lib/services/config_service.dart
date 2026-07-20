@@ -1,3 +1,5 @@
+// Copyright 2026 文强哥 (Johnny520). All rights reserved.
+// 企信查 Flutter 版 · 企业工商信息查询 App
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// 配置服务：统一读写用户设置（API 密钥、开关、主题等）。

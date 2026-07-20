@@ -1,6 +1,8 @@
+// Copyright 2026 文强哥 (Johnny520). All rights reserved.
+// 企信查 Flutter 版 · 企业工商信息查询 App
 import 'dart:convert';
 
-/// 缓存服务：内存缓存 + 轻量持久化。全程容错。
+/// 缓存服务：会话级内存缓存。全程容错，任何序列化/反序列化异常都不会上抛。
 class CacheService {
   final Map<String, String> _mem = {};
   bool broken = false;
