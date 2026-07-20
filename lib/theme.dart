@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 
 class Palette {
-  static const primary = Color(0xFF1565C0);
-  static const primaryDark = Color(0xFF0D47A1);
-  static const accent = Color(0xFF42A5F5);
+  static const primary = Color(0xFF4F7CFF);
+  static const primaryDark = Color(0xFF7C5CFF);
+  static const accent = Color(0xFF21D4FD);
   static const bg = Color(0xFFF4F6FB);
   static const surface = Colors.white;
   static const text = Color(0xFF1A1A1A);
@@ -23,16 +23,17 @@ ThemeData qxTheme() {
       seedColor: Palette.primary,
       brightness: Brightness.light,
     ),
-    scaffoldBackgroundColor: Palette.bg,
+    scaffoldBackgroundColor: Colors.transparent,
     appBarTheme: const AppBarTheme(
-      backgroundColor: Palette.primary,
+      backgroundColor: Colors.transparent,
       foregroundColor: Colors.white,
       elevation: 0,
+      scrolledUnderElevation: 0,
       centerTitle: true,
     ),
     cardTheme: CardTheme(
-      color: Palette.surface,
-      elevation: 2,
+      color: Colors.white.withOpacity(0.72),
+      elevation: 0,
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
     ),
@@ -81,6 +82,11 @@ ThemeData qxTheme() {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       backgroundColor: Palette.text,
       contentTextStyle: const TextStyle(color: Colors.white, fontSize: 14),
+    ),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: Colors.white.withOpacity(0.5),
+      elevation: 0,
+      indicatorColor: Colors.white.withOpacity(0.55),
     ),
   );
 }

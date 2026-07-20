@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'theme.dart';
+import 'glass.dart';
 import 'services/config_service.dart';
 import 'services/cache_service.dart';
 import 'services/api_service.dart';
@@ -96,6 +97,7 @@ class _AppLoaderState extends State<AppLoader> {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: qxTheme(),
+        builder: (context, child) => GlassBackground(child: child!),
         home: const Scaffold(
           body: Center(child: CircularProgressIndicator()),
         ),
@@ -118,6 +120,7 @@ class _AppLoaderState extends State<AppLoader> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: qxTheme(),
+      builder: (context, child) => GlassBackground(child: child!),
       home: Scaffold(
         appBar: AppBar(title: const Text('免责声明')),
         body: SafeArea(
@@ -230,6 +233,7 @@ class _QxAppState extends State<QxApp> {
       debugShowCheckedModeBanner: false,
       title: '企信查',
       theme: qxTheme(),
+      builder: (context, child) => GlassBackground(child: child!),
       home: Scaffold(
         appBar: AppBar(
           title: const Text('企信查'),
