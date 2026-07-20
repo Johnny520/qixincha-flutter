@@ -1,5 +1,5 @@
-import 'dart:convert';
-import 'dart:async';
+// Copyright 2026 文强哥 (Johnny520). All rights reserved.
+// 企信查 Flutter 版 · 企业工商信息查询 App
 import 'package:http/http.dart' as http;
 import '../models/company.dart';
 import 'config_service.dart';
@@ -15,27 +15,6 @@ class ApiService {
       'Mozilla/5.0 (Linux; Android 12) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Mobile';
 
   ApiService(this.config, this.cache);
-
-  Future<Map<String, dynamic>?> _fetchJson(
-    String url, {
-    Map<String, String>? headers,
-    Map<String, String>? query,
-  }) async {
-    try {
-      final uri = Uri.parse(url).replace(queryParameters: query);
-      final resp = await http
-          .get(uri, headers: {'User-Agent': _ua, ...?headers})
-          .timeout(_timeout);
-      if (resp.statusCode != 200) return null;
-      final ct = resp.headers['content-type'] ?? '';
-      if (ct.contains('json') || resp.body.trim().startsWith('{') || resp.body.trim().startsWith('[')) {
-        return jsonDecode(resp.body) as Map<String, dynamic>;
-      }
-      return {'_html': resp.body};
-    } catch (e) {
-      return null;
-    }
-  }
 
   /// 搜索企业。优先使用已配置的免费 API，全部不可用时兜底网页抓取。
   Future<List<Company>> search(String q) async {

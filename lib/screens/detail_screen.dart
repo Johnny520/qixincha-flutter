@@ -1,6 +1,10 @@
+// Copyright 2026 文强哥 (Johnny520). All rights reserved.
+// 企信查 Flutter 版 · 企业工商信息查询 App
 import 'package:flutter/material.dart';
 import '../models/company.dart';
 import '../theme.dart';
+import '../widgets/info_row.dart';
+import '../widgets/company_fields.dart';
 
 class DetailScreen extends StatelessWidget {
   final Company company;
@@ -10,15 +14,7 @@ class DetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     // 收集要展示的字段
-    final display = <String, String>{
-      if (company.creditCode != null) '统一社会信用代码': company.creditCode!,
-      if (company.legalPerson != null) '法定代表人': company.legalPerson!,
-      if (company.status != null) '登记状态': company.status!,
-      if (company.registeredCapital != null) '注册资本': company.registeredCapital!,
-      if (company.establishDate != null) '成立日期': company.establishDate!,
-      if (company.regAddress != null) '注册地址': company.regAddress!,
-      ...company.extra.map((k, v) => MapEntry(k, v.toString())),
-    };
+    final display = companyDisplayFields(company);
 
     return Scaffold(
       appBar: AppBar(title: Text(company.name, maxLines: 1, overflow: TextOverflow.ellipsis)),
@@ -59,31 +55,13 @@ class DetailScreen extends StatelessWidget {
                       )
                     : Column(
                         children: display.entries
-                            .map((e) => _row(e.key, e.value))
+                            .map((e) => KeyValueRow(label: e.key, value: e.value))
                             .toList(),
                       ),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _row(String k, String v) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 110,
-            child: Text(k, style: const TextStyle(color: Palette.sub, fontSize: 14)),
-          ),
-          Expanded(
-            child: Text(v, style: const TextStyle(color: Palette.text, fontSize: 14, fontWeight: FontWeight.w500)),
-          ),
-        ],
       ),
     );
   }

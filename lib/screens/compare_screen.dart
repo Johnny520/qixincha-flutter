@@ -1,9 +1,13 @@
+// Copyright 2026 文强哥 (Johnny520). All rights reserved.
+// 企信查 Flutter 版 · 企业工商信息查询 App
 import 'package:flutter/material.dart';
 import '../models/company.dart';
 import '../services/config_service.dart';
 import '../services/cache_service.dart';
 import '../services/api_service.dart';
 import '../theme.dart';
+import '../widgets/info_row.dart';
+import '../widgets/company_fields.dart';
 
 class CompareScreen extends StatefulWidget {
   final ConfigService config;
@@ -27,14 +31,19 @@ class _CompareScreenState extends State<CompareScreen> {
   bool _loading = false;
 
   Future<void> _compare() async {
-    if (_a.text.trim().isEmpty || _b.text.trim().isEmpty) return;
+    final a = _a.text.trim();
+    final b = _b.text.trim();
+    if (a.isEmpty || b.isEmpty) return;
     setState(() => _loading = true);
     try {
-      _ca = await widget.api.getDetail(_a.text.trim());
-      _cb = await widget.api.getDetail(_b.text.trim());
+      final ca = await widget.api.getDetail(a);
+      final cb = await widget.api.getDetail(b);
+      // 接口可能返回 null（如未配置密钥且无抓取结果），回退为基础企业对象，避免对比页空白。
+      _ca = ca ?? Company(name: a);
+      _cb = cb ?? Company(name: b);
     } catch (e) {
-      _ca = Company(name: _a.text);
-      _cb = Company(name: _b.text);
+      _ca = Company(name: a);
+      _cb = Company(name: b);
     }
     if (mounted) setState(() => _loading = false);
   }
@@ -78,31 +87,24 @@ class _CompareScreenState extends State<CompareScreen> {
   }
 
   Widget _col(Company c) {
-    final display = <String, String>{
-      if (c.creditCode != null) '信用代码': c.creditCode!,
-      if (c.legalPerson != null) '法定代表人': c.legalPerson!,
-      if (c.status != null) '登记状态': c.status!,
-      if (c.registeredCapital != null) '注册资本': c.registeredCapital!,
-      if (c.establishDate != null) '成立日期': c.establishDate!,
-      ...c.extra.map((k, v) => MapEntry(k, v.toString())),
-    };
+    final display = companyDisplayFields(c);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(c.name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Palette.text)),
+            Text(c.name,
+                style: const TextStyle(
+                    fontSize: 17, fontWeight: FontWeight.w800, color: Palette.text)),
             const Divider(),
-            ...display.entries.map((e) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    SizedBox(width: 96, child: Text(e.key, style: const TextStyle(color: Palette.sub))),
-                    Expanded(child: Text(e.value, style: const TextStyle(fontWeight: FontWeight.w500))),
-                  ]),
-                )),
+            ...display.entries
+                .map((e) => KeyValueRow(label: e.key, value: e.value)),
             if (display.isEmpty)
-              const Text('暂无对比数据', style: TextStyle(color: Palette.sub)),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Text('暂无对比数据', style: TextStyle(color: Palette.sub)),
+              ),
           ],
         ),
       ),
