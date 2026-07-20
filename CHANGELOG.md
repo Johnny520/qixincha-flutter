@@ -1,6 +1,6 @@
 # 企信查 更新日志
 
-## v1.3.1
+## v1.4.0
 - **作者署名统一**：README、LICENSE、pubspec、设置页「关于」与全部 Dart 源码版权头统一署名为「文强哥 / Johnny520」。
 - **新增 MIT 许可证**：补充 `LICENSE` 文件（版权人 文强哥 (Johnny520)，年份 2026）。
 - **缺陷修复**：对比页在详情接口返回 `null`（而非抛异常）时不再空白，自动回退为基础企业对象；移除 `api_service` 中未被调用的 `_fetchJson` 死代码与冗余 `dart:convert` / `dart:async` import。
